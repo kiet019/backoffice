@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { SortIcon } from './_components/table/sort-arrow';
 import { FilterForm } from './_components/filter-form';
 import Box from '@mui/material/Box';
-import { getOrderStatusColor, getPlaceColor, getTagColor } from '@/lib/order/config';
+import { defaultFilter, getOrderStatusColor, getPlaceColor, getTagColor } from '@/lib/order/config';
 import { CollapseCard } from '@/components/common/card/collapse-card';
 import { StyledChip } from '@/components/common/chip';
 import { SearchParams, backgroundColor } from '@/lib/config';
@@ -27,7 +27,8 @@ import { notFound } from 'next/navigation';
 
 
 export default async function Order({ searchParams }: { searchParams: SearchParams }) {
-   const res = await getOrderList(searchParams)
+       const res = await getOrderList(searchParams)
+    // const res = { filter: defaultFilter}
     if (res.error !== undefined) {
         return notFound()
     }
@@ -35,7 +36,7 @@ export default async function Order({ searchParams }: { searchParams: SearchPara
         return (
             <>
                 <CollapseCard title="Tìm kiếm đơn hàng" backgroundColor={backgroundColor} padding="1rem">
-                    <FilterForm filterProps={res.filter} searchParams={searchParams}/>
+                    <FilterForm filterProps={res.filter} searchParams={searchParams} />
                 </CollapseCard>
                 <Box marginTop="1rem">
                     <TableContainer component={Paper} sx={{
@@ -53,15 +54,15 @@ export default async function Order({ searchParams }: { searchParams: SearchPara
                                 <TableRow>
                                     <Cell body={false} width="170px">Mã đơn hàng</Cell>
                                     <Cell body={false} width="100px">Khu vực</Cell>
-                                    <Cell body={false} width="100px">Đối tác</Cell>
-                                    <Cell body={false} width="210px">
+                                    <Cell body={false} width="120px">Đối tác</Cell>
+                                    <Cell body={false} width="170px">
                                         <FlexRowCenter alignItems="center">
-                                            Ngày tạo đơn hàng<SortIcon href="/orders" />
+                                            Ngày tạo đơn hàng<SortIcon type="Created" searchParams={searchParams} />
                                         </FlexRowCenter>
                                     </Cell>
                                     <Cell body={false} width="210px">
                                         <FlexRowCenter alignItems="center">
-                                            Ngày hoàn tất thanh toán<SortIcon href="/orders" />
+                                            Ngày hoàn tất thanh toán<SortIcon type="PayDate" searchParams={searchParams} />
                                         </FlexRowCenter>
                                     </Cell>
                                     <Cell body={false} width="190px">Trạng thái</Cell>
@@ -101,6 +102,7 @@ export default async function Order({ searchParams }: { searchParams: SearchPara
                                             <Typography sx={{
                                                 height: "105px",
                                                 overflowY: "scroll",
+                                                overflowX: "hidden",
                                                 textAlign: "left",
                                                 "::-webkit-scrollbar": {
                                                     width: "5px",
@@ -122,7 +124,7 @@ export default async function Order({ searchParams }: { searchParams: SearchPara
                         </Table>
                         {/* <Calendar/> */}
                     </TableContainer>
-                    <Pagination numberLine={res.filter.numberLine} page={res.filter.page} totalPage={res.filter.totalPage} searchParams={searchParams}/>
+                    <Pagination numberLine={res.filter.numberLine} page={res.filter.page} totalPage={res.filter.totalPage} searchParams={searchParams} />
                 </Box>
             </>
         );

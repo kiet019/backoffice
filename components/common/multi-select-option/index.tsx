@@ -15,10 +15,11 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import useWindowSize from '../../../hook/use-window-size';
 import { OptionProps, checkDuplicate, getOptionsName } from '@/lib/config';
 
-export default function MultipleSelectOption({ handleChangeOption, option, options }: {
+export default function MultipleSelectOption({ error = false, handleChangeOption, option, options }: {
     handleChangeOption: any,
     option: number[],
     options: OptionProps[],
+    error?: boolean
 }) {
     const [anchorElNav, setAnchorElNav] = React.useState<HTMLDivElement | null>(null);
     const id = options[0].name
@@ -30,7 +31,7 @@ export default function MultipleSelectOption({ handleChangeOption, option, optio
     }
     React.useEffect(() => {
         setWidth(document.getElementById(id)?.clientWidth || 250)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [document.getElementById(id)?.clientWidth, clientWidth])
     const handleAdd = (data: number) => {
         if (checkDuplicate(data, option)) {
@@ -45,7 +46,7 @@ export default function MultipleSelectOption({ handleChangeOption, option, optio
         <FormControl fullWidth id={id}>
             <FlexBetween
                 sx={{
-                    border: "1px solid rgba(0, 0, 0, 0.23)",
+                    border: error ? "2px solid red !important" :  "1px solid rgba(0, 0, 0, 0.23)",
                     backgroundColor: "white",
                     padding: "1px 9px",
                     ":hover": {
@@ -76,7 +77,7 @@ export default function MultipleSelectOption({ handleChangeOption, option, optio
                     const currentTarget = document.getElementById(id) as HTMLDivElement
                     setAnchorElNav(currentTarget)
                 }}>
-                    {anchorElNav ? <ArrowDropUpIcon sx={{ color: "black"}}/> : <ArrowDropDownIcon sx={{ color: "black"}}/>}
+                    {anchorElNav ? <ArrowDropUpIcon sx={{ color: "black" }} /> : <ArrowDropDownIcon sx={{ color: "black" }} />}
                 </FlexBox>
 
                 <Popover
@@ -97,7 +98,7 @@ export default function MultipleSelectOption({ handleChangeOption, option, optio
                                 sx={{
                                     width: anchorElNav?.clientWidth
                                 }}
-                                key={item.id} onClick={() => {  
+                                key={item.id} onClick={() => {
                                     handleAdd(item.id)
                                     setAnchorElNav(null)
                                 }}>

@@ -68,7 +68,6 @@ export default function ViewDate({ dateValue, handleChangeDateValue, error, setE
                             // '&[id=":r2:"]' : {
                             //     color: dateValue?.[1] === null && dateValue?.[0] !== null ? "red" : "inherit"
                             // },
-                            
                         },
                         
                     }} />

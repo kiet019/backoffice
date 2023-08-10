@@ -14,8 +14,8 @@ export default function Layout({ children }: {
     return (
         <>
             <div style={{
-                width: "fit-content",
-                margin: "1rem"
+                width: "98%",
+                margin: "1rem 1%"
             }}>
                 {children}
             </div>

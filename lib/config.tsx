@@ -15,7 +15,10 @@ export interface SearchParams {
     dateStart?: string,
     dateEnd?: string,
     input?: string,
-    option?: string
+    option?: string,
+    dateOption?: string,
+    createdAt?: string,
+    paymentCompletedAt?: string
 }
 
 export const getOptionsName = (id: number, options: OptionProps[]): string => {

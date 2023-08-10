@@ -31,10 +31,7 @@ interface Props {
     filterProps: FilterProps,
     searchParams: SearchParams
 }
-// [
-//     filterProps.dateStart !== undefined ? filterProps.dateStart : null,
-//     filterProps.dateEnd !== undefined ? filterProps.dateEnd : null
-// ]
+
 export const FilterForm = ({ filterProps, searchParams }: Props) => {
     const [searchOption, setSearchOption] = useState<number>(filterProps.searchOption.id)
     const [searchInput, setSearchInput] = useState<string>(filterProps.searchInput)
@@ -90,9 +87,10 @@ export const FilterForm = ({ filterProps, searchParams }: Props) => {
 
     const pathname = usePathname()
     const handleFilterClick = () => {
-        if (dateValue?.[0] === null && dateValue?.[1] !== null || dateValue?.[0] !== null && dateValue?.[1] === null || error) {
+        if ((dateOption.length === 0 && dateValue?.[0] !== null && dateValue?.[1] !== null) 
+            || (dateValue?.[0] === null && dateValue?.[1] !== null || dateValue?.[0] !== null && dateValue?.[1] === null || error)) {
+
         } else {
-            console.log(dateValue)
             const current = searchParams
             current.dateStart = undefined
             current.dateEnd = undefined
@@ -106,10 +104,12 @@ export const FilterForm = ({ filterProps, searchParams }: Props) => {
                     option: searchOption.toString(),
                     status: convertArrayToString(statusOption),
                     partner: convertArrayToString(companyOption),
-                    dateStart: dateValue?.[0] !== null? format(dateValue?.[0] as Date, "yyyy-MM-dd") : undefined,
-                    dateEnd: dateValue?.[1] !== null ? format(dateValue?.[1] as Date, "yyyy-MM-dd") : undefined
+                    dateStart: dateValue?.[0] !== null ? format(dateValue?.[0] as Date, "yyyy-MM-dd") : undefined,
+                    dateEnd: dateValue?.[1] !== null ? format(dateValue?.[1] as Date, "yyyy-MM-dd") : undefined,
+                    dateOption: convertArrayToString(dateOption)
                 }
             }).href)
+
         }
     }
     return (
@@ -128,7 +128,12 @@ export const FilterForm = ({ filterProps, searchParams }: Props) => {
                     <SubTitle title="Chọn loại ngày theo thời gian" />
                     <Grid container spacing={0}>
                         <Grid item lg={5.5} xs={2.5}>
-                            <MultipleSelectOption handleChangeOption={handleChangeDateOption} option={dateOption} options={filterProps.filterOptionsList[3].filterOptions} />
+                            <MultipleSelectOption
+                                handleChangeOption={handleChangeDateOption}
+                                option={dateOption}
+                                options={filterProps.filterOptionsList[3].filterOptions}
+                                error={(dateOption.length === 0 && dateValue?.[0] !== null && dateValue?.[1] !== null)}
+                            />
                         </Grid>
                         <Grid item lg={6} xs={9.5}>
                             <ViewDate dateValue={dateValue} handleChangeDateValue={handleChangeDateValue} error={error} setError={setError} />
@@ -160,7 +165,6 @@ export const FilterForm = ({ filterProps, searchParams }: Props) => {
                     }} onClick={() => {
                         router.refresh()
                         router.push("/order")
-
                     }}>Đặt lại</StyledButton>
                     <StyledButton variant="contained" color="primary" onClick={handleFilterClick}>Lọc</StyledButton>
                 </Box>

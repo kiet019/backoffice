@@ -5,22 +5,6 @@ import { format, parseISO } from "date-fns"
 
 
 const mappedOrderStatusToClient = (name: string) => {
-    // let status: OptionProps | undefined = undefined
-    // if (name === "NEW") {
-    //     status = { id: 1, name: "Mới" }
-    // } else if (name === "PROCESSING") {
-    //     status = { id: 2, name: "Đang xử lý" }
-    // } else if (name === "PROCESSED") {
-    //     status = { id: 3, name: "Đã xử lý" }
-    // } else if (name === "INTERNATIONAL_TRACKING_AVAILABLE") {
-    //     status = { id: 4, name: "Đã có tracking quốc tế" }
-    // } else if (name = "DELIVERED") {
-    //     status = { id: 5, name: "Đã giao hàng" }
-    // } else if (name = "CANCELLED") {
-    //     status = { id: 6, name: "Đã hủy" }
-    // }
-    // return status ? status : { id: 1, name: "Mới" }
-
     let status: OptionProps = { id: 1, name: "Mới" }
 
     switch (name) {
@@ -86,12 +70,12 @@ const mappedToClient = (res: any): FilterProps => {
     res.result.forEach((order: any) => {
         const tag: OptionProps[] = []
         order.orders_is_vat !== 0 ? tag.push({ id: 1, name: "VAT" }) : null
-        order.isFastShipping? tag.push({ id: 2, name: "Nhanh" }) : null
+        order.isFastShipping ? tag.push({ id: 2, name: "Nhanh" }) : null
         orderList.push({
             company: order.partner_name,
             createDate: {
-                date: format(parseISO(order.orders_created_at.split("T")[0]), "dd/MM/yyyy"),
-                time: order.orders_created_at.split("T")[1].split(".")[0]
+                date: format(parseISO(order.orders_payment_completed_at.split("T")[0]), "dd/MM/yyyy"),
+                time: order.orders_payment_completed_at.split("T")[1].split(".")[0]
             },
             href: `${baseURL}order/${order.orders_order_code}`,
             id: order.orders_order_code,
@@ -112,7 +96,6 @@ const mappedToClient = (res: any): FilterProps => {
     let searchInput: string = ""
     if (res.info.query.search.orderCodes.length > 0) {
         searchOption = { id: 1, name: "Mã đơn hàng" }
-        console.log(res.info.query.search.orderCodes)
         searchInput = convertInput(res.info.query.search.orderCodes)
     } else if (res.info.query.search.purchaseNote !== '') {
         searchOption = { id: 2, name: "Ghi chú" }
@@ -138,8 +121,11 @@ const mappedToClient = (res: any): FilterProps => {
         statusSelectedOption.push(mappedOrderStatusToClient(orderStatus).id)
     })
     const dateOption: number[] = []
+    res.info.query.filter.paymentCompleteDateRanges !== undefined ? dateOption.push(1) : null
     res.info.query.filter.createOrderDateRanges !== undefined ? dateOption.push(2) : null
-
+    let dateRange: any[] = []
+    res.info.query.filter.paymentCompleteDateRanges !== undefined ? dateRange = [...res.info.query.filter.paymentCompleteDateRanges] : null
+    res.info.query.filter.createOrderDateRanges !== undefined ? dateRange = [...res.info.query.filter.createOrderDateRanges] : null
     const filter: FilterProps = {
         page: res.info.page,
         totalPage: res.info.totalPages,
@@ -165,10 +151,8 @@ const mappedToClient = (res: any): FilterProps => {
                 filterOption: dateOption
             }
         ],
-        dateStart: res.info.query.filter.createOrderDateRanges[0] !== undefined ?
-            new Date(res.info.query.filter.createOrderDateRanges[0]) : null,
-        dateEnd: res.info.query.filter.createOrderDateRanges[0] !== undefined ?
-            new Date(res.info.query.filter.createOrderDateRanges[1]) : null,
+        dateStart: new Date(dateRange[0]),
+        dateEnd: new Date(dateRange[1]),
         orderList
     }
     return filter
@@ -179,13 +163,17 @@ interface GetOrderProps {
         page: number,
         limit: number,
         partnerIds: string[],
-        dateRange: string[],
         orderStatus: string[],
 
         orderCodes: string[],
         purchaseNote: string,
         buyerPhoneNumbers: string[],
         buyerEmails: string[],
+
+        dateOption: {
+            paymentCompleteDateRange?: string[]
+            createOrderDateRange?: string[]
+        }
     }
 }
 
@@ -206,17 +194,36 @@ const mappedToApi = (data: SearchParams): GetOrderProps => {
     let buyerEmails: string[] = []
 
     switch (data.option) {
-        case "1": 
+        case "1":
             orderCodes = [...orderCodes, ...data.input?.split(",") as string[]]
             break;
-        case "2": 
+        case "2":
             purchaseNote = data.input as string
             break;
-        case "3": 
+        case "3":
             buyerPhoneNumbers = [...buyerPhoneNumbers, ...data.input?.split(",") as string[]]
             break;
         case "4":
             buyerEmails = [...buyerPhoneNumbers, ...data.input?.split(",") as string[]]
+            break;
+    }
+    let dateOption = {}
+    const dateSelected = convertStringToArray(data.dateOption)
+    const dateRange = data.dateStart && data.dateEnd ? [data.dateStart, data.dateEnd] : []
+    switch (dateSelected.length) {
+        case 0:
+            dateOption = { paymentCompleteDateRange: dateRange }
+            break;
+        case 1:
+            dateSelected[0] === "1" ?
+                dateOption = { paymentCompleteDateRange: dateRange } :
+                dateOption = { createOrderDateRange: dateRange }
+            break;
+        case 2:
+            dateOption = {
+                paymentCompleteDateRange: dateRange,
+                createOrderDateRange: dateRange
+            }
             break;
     }
     return {
@@ -225,17 +232,16 @@ const mappedToApi = (data: SearchParams): GetOrderProps => {
             limit: Number.parseInt(handleChoose(undefined, data.numberLine, defaultFilter.numberLine)),
             partnerIds,
             orderStatus,
-            dateRange: data.dateStart && data.dateEnd ? [data.dateStart, data.dateEnd] : [],
             orderCodes,
             purchaseNote,
             buyerPhoneNumbers,
-            buyerEmails
+            buyerEmails,
+            dateOption
         }
     }
 }
 export const getOrderList = async (filterFromClient: SearchParams) => {
     const filter = mappedToApi(filterFromClient)
-    console.log(filter)
     try {
         const res = await fetch("http://localhost:3003/orders/getFilteredList", {
             method: "POST",
@@ -250,20 +256,23 @@ export const getOrderList = async (filterFromClient: SearchParams) => {
                     orderCodes: filter.variables.orderCodes,
                     purchaseNote: filter.variables.purchaseNote,
                     buyerPhoneNumbers: filter.variables.buyerPhoneNumbers,
-                    buyerEmails: filter.variables.buyerEmails ,
+                    buyerEmails: filter.variables.buyerEmails,
 
                     orderStatus: filter.variables.orderStatus,
-                    createOrderDateRange: filter.variables.dateRange,
-                    partnerIds: filter.variables.partnerIds
+                    partnerIds: filter.variables.partnerIds,
+                    ...filter.variables.dateOption,
                 },
                 sort: {
-                    createdAt: "DESC"
+                    // createdAt: "DESC"
+                    paymentCompletedAt: "ASC"
                 }
             })
         })
         const data = await res.json()
+        console.log(data.data.info.query.filter)
         return {
             filter: mappedToClient(data.data)
+            // filter: defaultFilter
         }
     } catch (error) {
         console.log(error)

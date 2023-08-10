@@ -129,7 +129,10 @@ export const handleRouteOrderPage = ({
         dateStart,
         dateEnd,
         input,
-        option
+        option,
+        dateOption,
+        createdAt,
+        paymentCompletedAt
     }
 }: {
     currentPath: string,
@@ -140,21 +143,31 @@ export const handleRouteOrderPage = ({
     const url = new URL(baseURL + currentPath)
     url.searchParams.append("numberLine", handleChoose(numberLine, current.numberLine, filter.numberLine))
     url.searchParams.append("page", handleChoose(page, current.page, filter.page))
+    const choosedOption = handleChoose(option, current.option, undefined)
+    const choosedInput = handleChoose(input, current.input, undefined)
+    const choosedStatus = handleChoose(status, current.status, undefined)
+    const choosedPartner = handleChoose(partner, current.partner, undefined)
+    const choosedDateStart = handleChoose(dateStart, current.dateStart, undefined)
+    const choosedDateEnd = handleChoose(dateEnd, current.dateEnd, undefined)
+    const choosedDateOption = handleChoose(dateOption, current.dateOption, filter.filterOptionsList[3].filterOption)
+    const choosedCreatedAt = handleChoose(createdAt, current.createdAt, undefined)
 
-    handleChoose(option, current.option, undefined) ?
-        url.searchParams.append("option", handleChoose(option, current.option, undefined)) : url.searchParams.delete("option")
-    handleChoose(input, current.input, undefined) ?
-        url.searchParams.append("input", handleChoose(input, current.input, undefined)) : url.searchParams.delete("option")
+    const choosedPaymentCompletedAt = handleChoose(paymentCompletedAt, current.paymentCompletedAt, undefined)
+    console.log("payment", paymentCompletedAt)
+    console.log("created", createdAt)
 
-
-    handleChoose(status, current.status, undefined) ?
-        url.searchParams.append("status", handleChoose(status, current.status, undefined)) : url.searchParams.delete("status")
-    handleChoose(partner, current.partner, undefined) ?
-        url.searchParams.append("partner", handleChoose(partner, current.partner, undefined)) : url.searchParams.delete("partner")
-    handleChoose(dateStart, current.dateStart, undefined) ?
-        url.searchParams.append("dateStart", handleChoose(dateStart, current.dateStart, undefined)) : url.searchParams.delete("dateStart")
-    handleChoose(dateEnd, current.dateEnd, undefined) ?
-        url.searchParams.append("dateEnd", handleChoose(dateEnd, current.dateEnd, undefined)) : url.searchParams.delete("dateEnd")
-    console.log(url)
+    choosedOption ? url.searchParams.append("option", choosedOption) : url.searchParams.delete("option")
+    choosedInput ? url.searchParams.append("input", choosedInput) : url.searchParams.delete("input")
+    choosedStatus ? url.searchParams.append("status", choosedStatus) : url.searchParams.delete("status")
+    choosedPartner ? url.searchParams.append("partner", choosedPartner) : url.searchParams.delete("partner")
+    choosedDateStart ? url.searchParams.append("dateStart", choosedDateStart) : url.searchParams.delete("dateStart")
+    choosedDateEnd ? url.searchParams.append("dateEnd", choosedDateEnd) : url.searchParams.delete("dateEnd")
+    choosedDateOption ? url.searchParams.append("dateOption", choosedDateOption) : url.searchParams.delete("dateOption")
+    choosedCreatedAt ? url.searchParams.append("createdAt", choosedCreatedAt): url.searchParams.delete("createdAt")
+    choosedPaymentCompletedAt ? url.searchParams.append("paymentCompletedAt", choosedPaymentCompletedAt) : url.searchParams.delete("paymentCompletedAt")
+    
+    if (choosedInput === "") {
+        url.searchParams.delete("option")
+    }
     return url
 }
