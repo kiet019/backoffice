@@ -47,7 +47,7 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
       <div></div>
       <FlexBox padding={2} alignItems='center' whiteSpace='nowrap'>
         <T marginRight='1rem'>
-          {totalPage === 0 ? 0 : `${(page - 1) * numberLine + 1} - ${page * numberLine}`} / {totalPage * numberLine}
+          {totalPage === 0 ? 0 : `${(page - 1) * numberLine + 1} - ${page * numberLine}`} / {totalPage * numberLine} 
           dòng
         </T>
         <FormControl

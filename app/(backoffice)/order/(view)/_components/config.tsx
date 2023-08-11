@@ -17,12 +17,12 @@ export const placeOptions = [
 ]
 export const statusOptions = [
   { id: '0', name: '-- Chọn trạng thái --' },
-  { id: 'new', name: 'Mới' },
-  { id: 'processing', name: 'Đang xử lý' },
-  { id: 'processed', name: 'Đã xử lý' },
-  { id: 'tracking', name: 'Đã có tracking quốc tế' },
-  { id: 'completed', name: 'Đã giao hàng' },
-  { id: 'canceled', name: 'Đã hủy' }
+  { id: 'NEW', name: 'Mới' },
+  { id: 'PROCESSING', name: 'Đang xử lý' },
+  { id: 'PROCESSED', name: 'Đã xử lý' },
+  { id: 'INTERNATIONAL_TRACKING_AVAILABLE', name: 'Đã có tracking quốc tế' },
+  { id: 'DELIVERED', name: 'Đã giao hàng' },
+  { id: 'CANCELLED', name: 'Đã hủy' }
 ]
 export const originOptions = [
   { id: '0', name: '-- Chọn nước --' },
@@ -41,22 +41,20 @@ export const tag = [
   { id: 'vat', name: 'VAT' },
   { id: 'fast', name: 'Nhanh' }
 ]
-export const sort = {
-  sortType: "completedSort"
-}
+
 export const getOrderStatusColor = (id: string): string => {
   switch (id) {
-    case 'new':
+    case 'NEW':
       return '#ED6C02'
-    case 'processing':
+    case 'PROCESSING':
       return '#FF6C60'
-    case 'processed':
+    case 'PROCESSED':
       return '#2E7D32'
-    case 'tracking':
+    case 'INTERNATIONAL_TRACKING_AVAILABLE':
       return '#2196F3'
-    case 'completed':
+    case 'DELIVERED':
       return 'rgba(0, 0, 0, 0.87)'
-    case 'canceled':
+    case 'CANCELLED':
       return '#757575'
   }
   return '#757575'
