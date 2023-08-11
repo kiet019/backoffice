@@ -1,27 +1,27 @@
-"use client"
-import { debounce } from '@mui/material/utils';
-import { useEffect, useState } from 'react';
+'use client'
+import { debounce } from '@mui/material/utils'
+import { useEffect, useState } from 'react'
 
 const useWindowSize = () => {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(0)
 
   const windowListener = debounce(() => {
-    if (window) setWidth(window.innerWidth);
-  }, 250);
+    if (window) setWidth(window.innerWidth)
+  }, 250)
 
   useEffect(() => {
     if (window) {
-      setWidth(window.innerWidth);
-      window.addEventListener('resize', windowListener);
+      setWidth(window.innerWidth)
+      window.addEventListener('resize', windowListener)
     }
 
     return () => {
-      windowListener.clear();
-      window && window.removeEventListener('resize', windowListener);
-    };
-  }, [windowListener]);
+      windowListener.clear()
+      window && window.removeEventListener('resize', windowListener)
+    }
+  }, [windowListener])
 
-  return width;
-};
+  return width
+}
 
-export default useWindowSize;
+export default useWindowSize

@@ -2,8 +2,8 @@ import { FC, Fragment } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import FlexBox from "@/components/mui/flex-box/flex-box";
-import Image from "@/components/mui/image";
+import FlexBox from '@/components/mui/flex-box/flex-box'
+import Image from '@/components/mui/image'
 
 // =======================================
 type SocialButtonsProps = {

@@ -87,8 +87,8 @@ const StyledTab = styled(Tab)({
 
 const ListItemWrapper = styled(FlexBox)(({ theme }) => ({
   cursor: 'pointer',
-  borderBottom: `1px solid ${theme.palette.info[100]}`,
-  ':hover': { backgroundColor: theme.palette.info[100] },
+  borderBottom: `1px solid ${theme.palette.info.light}`,
+  ':hover': { backgroundColor: theme.palette.info.light },
   ':last-of-type': { borderBottom: 0 }
 }))
 
@@ -97,7 +97,7 @@ const NotificationsPopover: FC = () => {
   const [tabValue, setTabValue] = useState('1')
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const handleClick = event => {
+  const handleClick = (event: any) => {
     setOpen(state => !state)
     setAnchorEl(event.currentTarget)
   }

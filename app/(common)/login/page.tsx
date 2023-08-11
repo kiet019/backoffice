@@ -23,7 +23,7 @@ const Login = () => {
     setPasswordVisibility(visible => !visible)
   }, [])
 
-  const handleFormSubmit = async (values: any) => {
+  const handleFormSubmit = async () => {
   }
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
