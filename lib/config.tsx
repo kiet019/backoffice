@@ -1,6 +1,5 @@
 export const backgroundColor = '#DDDFE5'
 
-
 export const checkDuplicate = (data: string, option: string[]) => {
   const isDuplicate = option.find(value => value === data)
   return isDuplicate

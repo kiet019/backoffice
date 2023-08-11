@@ -1,4 +1,3 @@
-import Container from '@mui/material/Container'
 import { Metadata } from 'next'
 import { ReactNode } from 'react'
 
@@ -8,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return <div style={{ maxWidth: "1400px", margin: "1rem auto"}}>{children}</div>
+  return <div style={{ maxWidth: '1400px', margin: '1rem auto' }}>{children}</div>
 }

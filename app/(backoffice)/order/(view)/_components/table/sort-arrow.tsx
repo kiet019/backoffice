@@ -28,13 +28,13 @@ export const SortIcon = ({ type }: Props) => {
     const url = new URLSearchParams(searchParams.toString())
     let isAsc = isASC
     if (isActive) {
-      isAsc = isASC === "ASC" ? "DESC" : "ASC"
-    } 
-    url.delete("sort")
-    url.delete("isAsc")
+      isAsc = isASC === 'ASC' ? 'DESC' : 'ASC'
+    }
+    url.delete('sort')
+    url.delete('isAsc')
 
-    url.append("sort", type)
-    url.append("isAsc", isAsc)
+    url.append('sort', type)
+    url.append('isAsc', isAsc)
 
     router.push(`${pathname}?${url.toString()}`)
   }

@@ -13,8 +13,6 @@ import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
 import InputBase from '@mui/material/InputBase'
 
-
-
 import FlexRowCenter from '@/components/mui/flex-box/flex-row-center'
 import FlexBox from '@/components/mui/flex-box/flex-box'
 import Globe from '@/components/icons/globe'

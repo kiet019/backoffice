@@ -23,8 +23,7 @@ const Login = () => {
     setPasswordVisibility(visible => !visible)
   }, [])
 
-  const handleFormSubmit = async () => {
-  }
+  const handleFormSubmit = async () => {}
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues,
@@ -35,7 +34,7 @@ const Login = () => {
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form onSubmit={handleSubmit}>
-        <Image src='/assets/images/bazaar-black-sm.svg' sx={{ m: 'auto' }} alt=''/>
+        <Image src='/assets/images/bazaar-black-sm.svg' sx={{ m: 'auto' }} alt='' />
 
         <H1 textAlign='center' mt={1} mb={4} fontSize={16}>
           Welcome To Bazaar

@@ -4,14 +4,14 @@ export const orderDetail: OrderDetail = {
   id: 'AM051119-355269',
   href: '/order/AM051119-355269',
   tag: [
-    { id: 1, name: 'VAT' },
-    { id: 2, name: 'Nhanh' }
+    { id: 'vat', name: 'VAT' },
+    { id: 'fast', name: 'Nhanh' }
   ],
-  place: { id: 1, name: 'SG' },
+  place: { id: 'sg', name: 'SG' },
   company: 'fado168',
   createDate: { date: '19/02/2023', time: '10:00:00' },
   paymentDate: { date: '25/02/2023', time: '14:00:01' },
-  status: { id: 1, name: 'Mới' },
+  status: { id: 'NEW', name: 'Mới' },
   note: 'mua lẹ',
   cost: 12.25,
   paymentMethod: 'Thanh toán qua FADO Pay',

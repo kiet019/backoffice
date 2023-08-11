@@ -6,7 +6,7 @@ import Popover from '@mui/material/Popover'
 import FlexBox from '@/components/mui/flex-box/flex-box'
 import CalendarPopup from './popup'
 import EventIcon from '@mui/icons-material/Event'
-import { DateRange, MultiInputDateRangeField } from '@mui/x-date-pickers-pro'
+import { MultiInputDateRangeField } from '@mui/x-date-pickers-pro'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
@@ -24,7 +24,7 @@ export default function ViewDate({
   error,
   setError
 }: {
-  dateValue: DateRange<Date> | null[2]
+  dateValue: any
   handleChangeDateValue: any
   error: boolean
   setError: any

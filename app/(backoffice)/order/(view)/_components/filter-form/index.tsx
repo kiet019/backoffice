@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
@@ -26,22 +26,59 @@ const StyledButton = styled(Button)({
   width: '80px',
   height: '40px'
 })
-
+const getFilter = (searchParams: ReadonlyURLSearchParams) => {
+  return {
+    search: {
+      option: searchParams.get('searchOption') ? (searchParams.get('searchOption') as string) : '',
+      input: searchParams.get('searchInput') ? (searchParams.get('searchInput') as string) : ''
+    },
+    date: {
+      option: searchParams.get('dateOption') ? (searchParams.get('dateOption')?.split('-') as string[]) : [],
+      input: (searchParams.get('dateStart') && searchParams.get('dateEnd')) ? [
+        searchParams.get('dateStart'),
+        searchParams.get('dateEnd')
+      ] : [null, null]
+    },
+    partner: {
+      input: searchParams.get('partnerOption') ? searchParams.get('partnerOption')?.split('-') : []
+    },
+    status: {
+      input: searchParams.get('statusOption') ? searchParams.get('statusOption')?.split('-') : []
+    },
+    origin: {
+      input: searchParams.get('originOption') ? searchParams.get('originOption')?.split('-') : []
+    }
+  }
+}
 export const FilterForm = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const filter = defaultFilter
 
-  console.log(searchParams.toString())
-  const [searchOption, setSearchOption] = useState<string>(filter.search.option)
-  const [searchInput, setSearchInput] = useState<string>(filter.search.input)
-  const [partnerOption, setPartnerOption] = useState<string[]>(filter.partner.input)
-  const [statusOption, setStatusOption] = useState<string[]>(filter.status.input)
-  const [originOption, setOriginOption] = useState<string[]>(filter.origin.input)
-  const [dateOption, setDateOption] = useState<string[]>(filter.date.option)
-  const [dateValue, setDateValue] = useState<DateRange<Date> | null[]>(filter.date.input)
+  const [searchOption, setSearchOption] = useState<string>('')
+  const [searchInput, setSearchInput] = useState<string>('')
+  const [partnerOption, setPartnerOption] = useState<string[]>([])
+  const [statusOption, setStatusOption] = useState<string[]>([])
+  const [originOption, setOriginOption] = useState<string[]>([])
+  const [dateOption, setDateOption] = useState<string[]>([])
+  const [dateValue, setDateValue] = useState<DateRange<Date> | null[]>([])
   const [error, setError] = useState<boolean>(false)
+  const [reset, handleReset] = useState<boolean>(false)
+
+  useEffect(() => {
+    let filter: any = defaultFilter
+    if (searchParams.get('searchOption')) {
+      filter = getFilter(searchParams)
+    }
+    setSearchOption(filter.search.option)
+    setSearchInput(filter.search.input)
+    setPartnerOption(filter.partner.input as string[])
+    setStatusOption(filter.status.input as string[])
+    setOriginOption(filter.origin.input as string[])
+    setDateOption(filter.date.option as string[])
+    setDateValue(filter.date.input as any)
+    setError(false)
+  }, [searchParams, reset])
 
   const handleFilterClick = () => {
     if (
@@ -53,14 +90,14 @@ export const FilterForm = () => {
     } else {
       const url = new URLSearchParams()
 
-      url.append("searchOption", searchOption)
-      url.append("searchInput", searchInput)
-      url.append("dateOption", convertArrayToString(dateOption))
-      url.append("dateStart", dateValue?.[0] !== null ? format(dateValue?.[0] as Date, 'yyyy-MM-dd'): "")
-      url.append("dateEnd", dateValue?.[1] !== null ? format(dateValue?.[1] as Date, 'yyyy-MM-dd'): "")
-      url.append("partnerOption", convertArrayToString(partnerOption))
-      url.append("statusOption", convertArrayToString(statusOption))
-      url.append("originOption", convertArrayToString(originOption))
+      url.append('searchOption', searchOption)
+      url.append('searchInput', searchInput)
+      url.append('dateOption', convertArrayToString(dateOption))
+      url.append('dateStart', dateValue?.[0] !== null ? format(dateValue?.[0] as Date, 'yyyy-MM-dd') : '')
+      url.append('dateEnd', dateValue?.[1] !== null ? format(dateValue?.[1] as Date, 'yyyy-MM-dd') : '')
+      url.append('partnerOption', convertArrayToString(partnerOption))
+      url.append('statusOption', convertArrayToString(statusOption))
+      url.append('originOption', convertArrayToString(originOption))
 
       router.push(`${pathname}?${url.toString()}`)
     }
@@ -137,7 +174,8 @@ export const FilterForm = () => {
               backgroundColor: 'white !important'
             }}
             onClick={() => {
-              router.push('/order')
+              handleReset(!reset)
+              router.push("/order")
             }}
           >
             Đặt lại

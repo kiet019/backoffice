@@ -15,7 +15,7 @@ export interface Tag {
   name: string
 }
 export interface Place {
-  id: string,
+  id: string
   name: string
 }
 export interface DateTime {
@@ -23,6 +23,6 @@ export interface DateTime {
   time: string
 }
 export interface OrderStatus {
-  id: string,
+  id: string
   name: string
 }

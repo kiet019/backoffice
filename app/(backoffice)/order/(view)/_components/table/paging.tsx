@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { T } from '@/components/common/typography/text'
 import { backgroundColor } from '@/lib/config'
-import { SearchParams } from '../interface'
 
 const pageOptions = [
   { value: 20, name: '20 dòng / trang' },
@@ -34,11 +33,11 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
 
   const handlePageChange = (page: number, numberLine: number) => {
     const url = new URLSearchParams(searchParams.toString())
-    url.delete("page")
-    url.delete("numberLine")
-    
-    url.append("page", page.toString())
-    url.append("numberLine", numberLine.toString())
+    url.delete('page')
+    url.delete('numberLine')
+
+    url.append('page', page.toString())
+    url.append('numberLine', numberLine.toString())
 
     router.push(`${pathname}?${url.toString()}`)
   }
@@ -47,8 +46,8 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
       <div></div>
       <FlexBox padding={2} alignItems='center' whiteSpace='nowrap'>
         <T marginRight='1rem'>
-          {totalPage === 0 ? 0 : `${(page - 1) * numberLine + 1} - ${page * numberLine}`} / {totalPage * numberLine} 
-          dòng
+          {totalPage === 0 ? 0 : `${(page - 1) * numberLine + 1} - ${page * numberLine}`} / {totalPage * numberLine}
+          {` dòng`}
         </T>
         <FormControl
           fullWidth
@@ -64,9 +63,13 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
             }}
           >
             {pageOptions.map(item => (
-              <MenuItem onClick={() => {
-                handlePageChange(page, item.value)
-              }} value={item.value} key={item.value}>
+              <MenuItem
+                onClick={() => {
+                  handlePageChange(page, item.value)
+                }}
+                value={item.value}
+                key={item.value}
+              >
                 {item.name}
               </MenuItem>
             ))}
@@ -75,7 +78,7 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
         <IconButton
           disabled={page === 1}
           onClick={() => {
-            
+            handlePageChange(1, numberLine)
           }}
         >
           <FirstPageIcon />
@@ -83,7 +86,7 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
         <IconButton
           disabled={page === 1}
           onClick={() => {
-            
+            handlePageChange(page - 1, numberLine)
           }}
         >
           <NavigateBeforeIcon />
@@ -108,7 +111,7 @@ export const Pagination = ({ totalPage }: { totalPage: number }) => {
         <IconButton
           disabled={page >= totalPage}
           onClick={() => {
-            
+            handlePageChange(totalPage, numberLine)
           }}
         >
           <LastPageIcon />

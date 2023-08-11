@@ -33,9 +33,9 @@ export const originOptions = [
   { id: 'kh', name: 'KH' }
 ]
 export const dateOptions = [
-  { id: "0", name: '-- Chọn loại ngày --' },
-  { id: "complete", name: 'Ngày hoàn tất thanh toán' },
-  { id: "create", name: 'Ngày tạo đơn hàng' }
+  { id: '0', name: '-- Chọn loại ngày --' },
+  { id: 'complete', name: 'Ngày hoàn tất thanh toán' },
+  { id: 'create', name: 'Ngày tạo đơn hàng' }
 ]
 export const tag = [
   { id: 'vat', name: 'VAT' },
@@ -60,14 +60,14 @@ export const getOrderStatusColor = (id: string): string => {
   return '#757575'
 }
 export const getTagColor = (id: string): string => {
-  if (id === "vat") {
+  if (id === 'vat') {
     return '#29B6F6'
   } else {
     return '#FFCA28'
   }
 }
 export const getPlaceColor = (id: string): string => {
-  if (id === "sg") {
+  if (id === 'sg') {
     return '#66BB6A'
   } else {
     return '#EC407A'
@@ -83,12 +83,12 @@ export const defaultFilter = {
     input: [null, null]
   },
   partner: {
-    input: [],
+    input: []
   },
   status: {
     input: []
   },
   origin: {
     input: []
-  },
+  }
 }
